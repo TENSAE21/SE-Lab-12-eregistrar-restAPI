@@ -12,4 +12,7 @@ public interface StudentService {
     List<Student> getLatestStudents();
     Student getStudentById(long id);
     void updateStudent(Classroom classroom, long studentId);
+    void deleteStudentById(Long studentId);
+    List<Student> searchStudents(String searchString);
+
 }

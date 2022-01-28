@@ -61,7 +61,8 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Student Number</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
                     <th scope="col">CGPA</th>
                     <th scope="col">Admission Date</th>
                     <th scope="col">&nbsp;</th>
@@ -73,7 +74,8 @@
                     <!--th:onclick="@{document.location='/elibrary/book/edit/{bookId}'(bookId=${book.bookId})}" -->
                     <th scope="row" th:text="${iterStat.count}+${'.'}"></th>
                     <td th:text="${student.studentNumber}"></td>
-                    <td th:text="${student.name}"></td>
+                    <td th:text="${student.firstName}"></td>
+                    <td th:text="${student.lastName}"></td>
                     <td th:text="${student.cgpa}"></td>
                     <td th:text="${student.admissionDate}"></td>
                     <td><a th:href="@{'/eregistrar/student/edit/{studentId}'(studentId=${student.studentId})}">Edit</a></td>

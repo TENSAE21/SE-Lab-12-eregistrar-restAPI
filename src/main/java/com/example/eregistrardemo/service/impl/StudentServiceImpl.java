@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Transactional
@@ -51,4 +55,54 @@ public class StudentServiceImpl implements StudentService {
     public void updateStudent(Classroom classroom, long studentId) {
         studentRepository.update(classroom, studentId);
     }
+
+    @Override
+    public void deleteStudentById(Long studentId) { studentRepository.deleteById(studentId);}
+
+    @Override
+    public List<Student> searchStudents(String searchString) {
+
+        if(containsDecimalPoint(searchString) && isGPA(searchString)) {
+            return studentRepository.findAllByCgpaEquals(Float.parseFloat(searchString));
+
+        } else if(isDate(searchString)) {
+            return studentRepository.findAllByAdmissionDateEquals(LocalDate.parse(searchString, DateTimeFormatter.ISO_DATE));
+        } else {
+            return studentRepository.findAllByFirstNameContainingOrLastNameContainingOrderByLastName(searchString, searchString);
+        }
+    }
+
+    private boolean isGPA(String searchString) {
+        boolean isParseableAsGPA = false;
+        try {
+            Double.parseDouble(searchString);
+            isParseableAsGPA = true;
+        } catch(Exception ex) {
+            if(ex instanceof ParseException) {
+                isParseableAsGPA = false;
+            }
+        }
+        return isParseableAsGPA;
+    }
+
+    private boolean isDate(String searchString) {
+        //admissionDate
+        boolean isParseableAsDate = false;
+        try {
+            LocalDate.parse(searchString, DateTimeFormatter.ISO_DATE);
+            isParseableAsDate = true;
+        } catch(Exception ex) {
+            if(ex instanceof DateTimeParseException) {
+                isParseableAsDate = false;
+            }
+        }
+        return isParseableAsDate;
+    }
+
+    private boolean containsDecimalPoint(String searchString) {
+        //cgpa
+        return searchString.contains(".");
+    }
+
+
 }
