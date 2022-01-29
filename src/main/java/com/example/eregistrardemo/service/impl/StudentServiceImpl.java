@@ -1,6 +1,5 @@
 package com.example.eregistrardemo.service.impl;
 
-import com.example.eregistrardemo.model.Classroom;
 import com.example.eregistrardemo.model.Student;
 import com.example.eregistrardemo.repository.StudentRepository;
 import com.example.eregistrardemo.service.StudentService;
@@ -37,6 +36,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Student updateById(Student student, long id) {
+        return studentRepository.findById(id)
+                .map(toUpdate -> {
+                    toUpdate.setFirstName(student.getFirstName());
+                    toUpdate.setLastName(student.getLastName());
+                    toUpdate.setCgpa(student.getCgpa());
+                    toUpdate.setStudentNumber(student.getStudentNumber());
+                    toUpdate.setAdmissionDate(student.getAdmissionDate());
+                    return studentRepository.save(toUpdate);
+                }).orElseGet(() -> studentRepository.save(student));
+    }
+
+    @Override
     public List<Student> getPassingStudentsOnly() {
         return studentRepository.findStudentsWithCgpaGreaterThan3(3.0f);
     }
@@ -49,11 +61,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getStudentById(long id) {
         return studentRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void updateStudent(Classroom classroom, long studentId) {
-        studentRepository.update(classroom, studentId);
     }
 
     @Override

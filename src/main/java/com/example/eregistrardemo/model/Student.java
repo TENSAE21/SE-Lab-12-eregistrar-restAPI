@@ -28,21 +28,6 @@ public class Student {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate admissionDate;
 
-    @OneToOne
-    @JoinColumn(name="transcript_id", unique = true) //nullable = false
-//    @OneToOne(mappedBy = "student", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Transcript transcript;
-
-    @ManyToOne()
-    @JoinColumn(name = "classroom_id", nullable = true)
-    private Classroom classroom;
-
-    @ManyToMany(cascade=CascadeType.MERGE)
-    @JoinTable(
-            name="students_courses",
-            joinColumns={@JoinColumn(name="student_id", referencedColumnName="student_id")},
-            inverseJoinColumns={@JoinColumn(name="course_id", referencedColumnName="course_id")})
-    private List<Course> courses;
 
     public Student() {
     }
@@ -55,34 +40,15 @@ public class Student {
         this.admissionDate = admissionDate;
     }
 
-    public Student(Long studentNumber, String firstName, String lastName, Float cgpa, LocalDate admissionDate, Transcript transcript) {
-        this.studentNumber = studentNumber;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.cgpa = cgpa;
-        this.admissionDate = admissionDate;
-        this.transcript = transcript;
-    }
 
-    public Student(Long studentNumber, String firstName, String lastName, Float cgpa, LocalDate admissionDate, Transcript transcript, Classroom cr) {
-        this.studentNumber = studentNumber;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.cgpa = cgpa;
-        this.admissionDate = admissionDate;
-        this.transcript = transcript;
-        this.classroom = cr;
-    }
-
-    public Student(Long studentId, Long studentNumber, String firstName, String lastName, Float cgpa, LocalDate admissionDate, Transcript transcript, Classroom cr) {
+    public Student(Long studentId, Long studentNumber, String firstName, String lastName, Float cgpa, LocalDate admissionDate) {
         this.studentId = studentId;
         this.studentNumber = studentNumber;
         this.lastName = lastName;
         this.firstName = firstName;
         this.cgpa = cgpa;
         this.admissionDate = admissionDate;
-        this.transcript = transcript;
-        this.classroom = cr;
+
     }
 
     public Long getStudentId() {
@@ -133,21 +99,6 @@ public class Student {
         this.admissionDate = admissionDate;
     }
 
-    public Transcript getTranscript() {
-        return transcript;
-    }
-
-    public void setTranscript(Transcript transcript) {
-        this.transcript = transcript;
-    }
-
-    public Classroom getClassroom() {
-        return classroom;
-    }
-
-    public void setClassroom(Classroom classroom) {
-        this.classroom = classroom;
-    }
 
     @Override
     public String toString() {
@@ -158,8 +109,6 @@ public class Student {
                 ", lastName='" + lastName + '\'' +
                 ", cgpa=" + cgpa +
                 ", admissionDate=" + admissionDate +
-                ", " + transcript +
-                ", " + classroom +
                 '}';
     }
 }
